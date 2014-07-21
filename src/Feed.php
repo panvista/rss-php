@@ -3,12 +3,14 @@
 /**
  * RSS for PHP - small and easy-to-use library for consuming an RSS Feed
  *
- * @author     David Grudl
+ * @author	 David Grudl
  * @copyright  Copyright (c) 2008 David Grudl
- * @license    New BSD License
- * @link       http://phpfashion.com/
- * @version    1.1
+ * @license	New BSD License
+ * @link	   http://phpfashion.com/
+ * @version	1.1
  */
+use ForceUTF8\Encoding;
+
 class Feed
 {
 	/** @var int */
@@ -31,7 +33,14 @@ class Feed
 	 */
 	public static function loadRss($url, $user = NULL, $pass = NULL)
 	{
-		$xml = new SimpleXMLElement(self::httpRequest($url, $user, $pass), LIBXML_NOWARNING | LIBXML_NOERROR);
+		$feedContent = self::httpRequest($url, $user, $pass);
+
+		try {
+			$xml = new SimpleXMLElement($feedContent, LIBXML_NOWARNING | LIBXML_NOERROR);
+		} catch (Exception $e) {
+			$xml = new SimpleXMLElement(Encoding::toUTF8($feedContent), LIBXML_NOWARNING | LIBXML_NOERROR); // Try again with feed converted to UTF-8
+		}
+
 		if (!$xml->channel) {
 			throw new FeedException('Invalid channel.');
 		}

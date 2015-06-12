@@ -166,7 +166,7 @@ class Feed
 				curl_setopt($curl, CURLOPT_USERPWD, "$user:$pass");
 			}
 			curl_setopt($curl, CURLOPT_HEADER, FALSE);
-			curl_setopt($curl, CURLOPT_TIMEOUT, 20);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 120);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE); // no echo, just return result
 			if (!ini_get('open_basedir')) {
 				curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE); // sometime is useful :)
